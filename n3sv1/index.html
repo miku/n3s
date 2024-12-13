@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <meta
+      http-equiv="X-Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <title>Hello from Electron renderer!</title>
+    <style>
+
+html, body, #editor {
+  margin: 0;
+  height: 100%;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: #333;
+}
+
+textarea, #editor div {
+  display: inline-block;
+  width: 49%;
+  height: 100%;
+  vertical-align: top;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0 20px;
+}
+
+textarea {
+  border: none;
+  border-right: 1px solid #ccc;
+  resize: none;
+  outline: none;
+  background-color: #f6f6f6;
+  font-size: 14px;
+  font-family: 'Monaco', courier, monospace;
+  padding: 20px;
+}
+
+code {
+  color: #f66;
+}
+
+.container {
+	display: flex;
+	height: 100%;
+}
+    </style>
+  </head>
+  <body>
+    <h1>Hello from Electron renderer!</h1>
+    <p>👋</p>
+	<div class="container">
+    <div id="editor">
+<textarea debounce="300"></textarea>
+    </div>
+</div>
+  </body>
+</html>
