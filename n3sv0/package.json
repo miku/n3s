@@ -1,0 +1,11 @@
+{
+  "name": "n3sv0",
+  "version": "1.0.0",
+  "description": "n3s prototype",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
