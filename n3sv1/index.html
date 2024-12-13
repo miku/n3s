@@ -13,8 +13,7 @@
 
         body {
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
             background-color: #f4f4f9;
             font-family: Arial, sans-serif;
             box-sizing: border-box;
@@ -22,7 +21,7 @@
 
         textarea {
             width: 100%;
-            height: 100%;
+            height: calc(100% - 30px);
             border: none;
             outline: none;
             resize: none;
@@ -33,14 +32,21 @@
             background-color: #fff;
         }
 
-        /* Ensure the textarea fills the entire viewport */
-        textarea {
-            flex-grow: 1;
+        .status-bar {
+            height: 30px;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            box-sizing: border-box;
+            font-size: 14px;
+            color: #333;
         }
     </style>
 </head>
 <body>
     <textarea placeholder="Start typing your notes..."></textarea>
+    <div class="status-bar">Status: Editing...</div>
 </body>
 </html>
 
