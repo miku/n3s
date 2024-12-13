@@ -1,2 +1,2 @@
-# n3s
-Notes prototypes
+# n3s: Notes prototypes
+
