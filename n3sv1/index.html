@@ -56,7 +56,7 @@
 <body>
     <textarea placeholder="Start typing your notes..." id="note-textarea"></textarea>
     <div class="preview" id="preview"></div>
-    <div class="status-bar" id="status-bar">0 1:1</div>
+    <div class="status-bar" id="status-bar">Characters: 0 | Row: 1, Column: 1 | Font size: 16px</div>
 
     <script>
         const textarea = document.getElementById('note-textarea');
@@ -73,14 +73,15 @@
             const text = textarea.value.substring(0, textarea.selectionStart);
             const row = text.split('\n').length;
             const column = text.split('\n').pop().length + 1;
-            statusBar.textContent = `${charCount} ${row}:${column}`;
+            const fontSize = window.getComputedStyle(textarea).fontSize;
+            statusBar.textContent = `Characters: ${charCount} | Row: ${row}, Column: ${column} | Font size: ${fontSize}`;
         }
 
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey && e.key === 'p') {
                 e.preventDefault();
                 togglePreviewMode();
-            } else if (e.ctrlKey && e.key === '+') {
+            } else if (e.ctrlKey && (e.key === '=' || e.key === '+')) {
                 e.preventDefault();
                 changeFontSize(1);
             } else if (e.ctrlKey && e.key === '-') {
@@ -104,6 +105,7 @@
             const currentSize = parseInt(window.getComputedStyle(textarea).fontSize, 10);
             const newSize = Math.max(10, currentSize + delta);
             textarea.style.fontSize = `${newSize}px`;
+            updateStatusBar(); // Update status bar after font size change
         }
 
         // Initialize the status bar
