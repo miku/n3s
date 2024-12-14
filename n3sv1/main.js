@@ -11,6 +11,8 @@ const createWindow = () => {
         height: 600,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
+                      contextIsolation: true,
+                        enableRemoteModule: false,
         }
     })
     win.loadFile('index.html')
