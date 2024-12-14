@@ -73,7 +73,7 @@
             const text = textarea.value.substring(0, textarea.selectionStart);
             const row = text.split('\n').length;
             const column = text.split('\n').pop().length + 1;
-            statusBar.textContent = `Characters: ${charCount} | Row: ${row}, Column: ${column}`;
+            statusBar.textContent = `${charCount} ${row}:${column}`;
         }
 
         document.addEventListener('keydown', (e) => {
