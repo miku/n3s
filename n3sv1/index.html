@@ -43,15 +43,26 @@
             font-size: 14px;
             color: #333;
         }
+
+        .preview {
+            display: none;
+            width: 100%;
+            height: calc(100% - 30px);
+            background-color: yellow;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 <body>
     <textarea placeholder="Start typing your notes..." id="note-textarea"></textarea>
+    <div class="preview" id="preview"></div>
     <div class="status-bar" id="status-bar">Characters: 0 | Row: 1, Column: 1</div>
 
     <script>
         const textarea = document.getElementById('note-textarea');
         const statusBar = document.getElementById('status-bar');
+        const preview = document.getElementById('preview');
+        let isPreviewMode = false;
 
         textarea.addEventListener('input', updateStatusBar);
         textarea.addEventListener('keyup', updateStatusBar);
@@ -63,6 +74,24 @@
             const row = text.split('\n').length;
             const column = text.split('\n').pop().length + 1;
             statusBar.textContent = `Characters: ${charCount} | Row: ${row}, Column: ${column}`;
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'p') {
+                e.preventDefault();
+                togglePreviewMode();
+            }
+        });
+
+        function togglePreviewMode() {
+            isPreviewMode = !isPreviewMode;
+            if (isPreviewMode) {
+                textarea.style.display = 'none';
+                preview.style.display = 'block';
+            } else {
+                textarea.style.display = 'block';
+                preview.style.display = 'none';
+            }
         }
 
         // Initialize the status bar
