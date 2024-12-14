@@ -1,4 +1,6 @@
 const { app, BrowserWindow } = require('electron/main')
+// include the Node.js 'path' module at the top of your file
+const path = require('node:path')
 
 // app, which controls your application's event lifecycle.
 // BrowserWindow, which creates and manages app windows.
@@ -7,6 +9,9 @@ const createWindow = () => {
     const win = new BrowserWindow({
         width: 800,
         height: 600,
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+        }
     })
     win.loadFile('index.html')
 }
