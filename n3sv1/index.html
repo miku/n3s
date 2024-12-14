@@ -37,6 +37,7 @@
             background-color: #ddd;
             display: flex;
             align-items: center;
+            justify-content: space-between;
             padding: 0 10px;
             box-sizing: border-box;
             font-size: 14px;
@@ -46,16 +47,26 @@
 </head>
 <body>
     <textarea placeholder="Start typing your notes..." id="note-textarea"></textarea>
-    <div class="status-bar" id="status-bar">Characters: 0</div>
+    <div class="status-bar" id="status-bar">Characters: 0 | Row: 1, Column: 1</div>
 
     <script>
         const textarea = document.getElementById('note-textarea');
         const statusBar = document.getElementById('status-bar');
 
-        textarea.addEventListener('input', () => {
+        textarea.addEventListener('input', updateStatusBar);
+        textarea.addEventListener('keyup', updateStatusBar);
+        textarea.addEventListener('click', updateStatusBar);
+
+        function updateStatusBar() {
             const charCount = textarea.value.length;
-            statusBar.textContent = `Characters: ${charCount}`;
-        });
+            const text = textarea.value.substring(0, textarea.selectionStart);
+            const row = text.split('\n').length;
+            const column = text.split('\n').pop().length + 1;
+            statusBar.textContent = `Characters: ${charCount} | Row: ${row}, Column: ${column}`;
+        }
+
+        // Initialize the status bar
+        updateStatusBar();
     </script>
 </body>
 </html>
