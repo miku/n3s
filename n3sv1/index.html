@@ -48,10 +48,15 @@
             display: none;
             width: 100%;
             height: calc(100% - 30px);
-            background-color: yellow;
+            background-color: #fff;
             box-sizing: border-box;
+            padding: 10px;
+            overflow-y: auto;
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
     <textarea placeholder="Start typing your notes..." id="note-textarea"></textarea>
@@ -95,6 +100,7 @@
             if (isPreviewMode) {
                 textarea.style.display = 'none';
                 preview.style.display = 'block';
+                preview.innerHTML = marked.parse(textarea.value);
             } else {
                 textarea.style.display = 'block';
                 preview.style.display = 'none';
