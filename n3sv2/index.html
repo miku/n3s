@@ -56,14 +56,12 @@
             line-height: 1.5;
         }
 
-        .highlight {
-            background-color: yellow;
-        }
+
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-    <textarea placeholder="Let's go …" id="note-textarea"></textarea>
+    <textarea spellcheck="false" placeholder="Let's go …" id="note-textarea"></textarea>
     <div class="preview" id="preview"></div>
     <div class="status-bar" id="status-bar">Characters: 0 | Row: 1, Column: 1 | Font size: 16px | Markdown files: 0</div>
 
@@ -133,11 +131,9 @@
                     const highlightEnd = highlightStart + "together".length;
                     textarea.setSelectionRange(highlightStart, highlightEnd);
                     textarea.focus();
-                    textarea.style.backgroundColor = 'yellow';
 
                     setTimeout(() => {
                         textarea.setSelectionRange(0, 0); // Reset selection
-                        textarea.style.backgroundColor = '';
                         deleteEffect(text, callback);
                     }, 2000);
                 }
