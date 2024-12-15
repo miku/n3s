@@ -79,7 +79,7 @@
             const row = text.split('\n').length;
             const column = text.split('\n').pop().length + 1;
             const fontSize = window.getComputedStyle(textarea).fontSize;
-            statusBar.textContent = `Characters: ${charCount} | Row: ${row}, Column: ${column} | Font size: ${fontSize}`;
+            statusBar.textContent = `Characters: ${charCount} | Row: ${row}, Column: ${column} | Font size: ${fontSize} | ${window.api.cwd}`;
         }
 
         document.addEventListener('keydown', (e) => {
