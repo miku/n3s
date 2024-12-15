@@ -1,6 +1,6 @@
 # Markdown Editing
 
-Trying: https://012.vuejs.org/examples/
+Trying: plain vanilla javascript.
 
 Idea: use a styled textarea; then toggle between preview and editing, like in
 Notable.
