@@ -1,3 +1,5 @@
+<!-- https://chatgpt.com/c/675cc7f0-0728-8002-9685-3f6f67545454 -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,7 +63,7 @@
 <body>
     <textarea placeholder="Let's go …" id="note-textarea"></textarea>
     <div class="preview" id="preview"></div>
-    <div class="status-bar" id="status-bar">Characters: 0 | Row: 1, Column: 1 | Font size: 16px</div>
+    <div class="status-bar" id="status-bar">Characters: 0 | Row: 1, Column: 1 | Font size: 16px | Markdown files: 0</div>
 
     <script>
         const textarea = document.getElementById('note-textarea');
@@ -79,7 +81,7 @@
             const row = text.split('\n').length;
             const column = text.split('\n').pop().length + 1;
             const fontSize = window.getComputedStyle(textarea).fontSize;
-            statusBar.textContent = `Characters: ${charCount} | Row: ${row}, Column: ${column} | Font size: ${fontSize} | ${window.api.cwd}`;
+            statusBar.textContent = `Characters: ${charCount} | Row: ${row}, Column: ${column} | Font size: ${fontSize} | Markdown files: ${markdownFileCount}`;
         }
 
         document.addEventListener('keydown', (e) => {
@@ -142,12 +144,27 @@
             }, 100);
         }
 
+        let markdownFileCount = 0; // Initialize markdown file count
+
+        async function initializeMarkdownCount() {
+            if (window.api && window.api.cwd && window.api.findMarkdownFiles) {
+                try {
+                    const files = await window.api.findMarkdownFiles(window.api.cwd);
+                    markdownFileCount = files.length;
+                    updateStatusBar(); // Update the status bar with the markdown file count
+                } catch (error) {
+                    console.error('Error finding markdown files:', error);
+                }
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             textarea.value = '';
             const introText = "kami: write together";
             typeEffect(introText, () => {
                 textarea.focus();
             });
+            initializeMarkdownCount(); // Fetch and display markdown file count
         });
 
         // Initialize the status bar
@@ -155,4 +172,5 @@
     </script>
 </body>
 </html>
+
 
