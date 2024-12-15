@@ -137,7 +137,7 @@
                         deleteEffect(text, callback);
                     }, 2000);
                 }
-            }, 100);
+            }, 50);
         }
 
         function deleteEffect(text, callback) {
@@ -151,7 +151,7 @@
                     clearInterval(interval);
                     callback();
                 }
-            }, 100);
+            }, 50);
         }
 
         let markdownFileCount = 0; // Initialize markdown file count
