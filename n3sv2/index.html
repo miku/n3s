@@ -32,20 +32,6 @@
             background-color: #fff;
         }
 
-        .typing-cursor {
-            animation: rainbow-cursor 1s infinite;
-        }
-
-        @keyframes rainbow-cursor {
-            0% { border-color: red; }
-            16% { border-color: orange; }
-            32% { border-color: yellow; }
-            48% { border-color: green; }
-            64% { border-color: blue; }
-            80% { border-color: indigo; }
-            100% { border-color: violet; }
-        }
-
         .status-bar {
             height: 30px;
             background-color: #ddd;
@@ -130,7 +116,6 @@
 
         function typeEffect(text, callback) {
             let index = 0;
-            textarea.classList.add('typing-cursor');
             const interval = setInterval(() => {
                 if (index < text.length) {
                     textarea.value += text[index];
@@ -152,7 +137,6 @@
                     updateStatusBar();
                 } else {
                     clearInterval(interval);
-                    textarea.classList.remove('typing-cursor');
                     callback();
                 }
             }, 100);
