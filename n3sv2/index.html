@@ -63,7 +63,7 @@
 <body>
     <textarea spellcheck="false" placeholder="Let's go …" id="note-textarea"></textarea>
     <div class="preview" id="preview"></div>
-    <div class="status-bar" id="status-bar">Characters: 0 | Row: 1, Column: 1 | Font size: 16px | Markdown files: 0</div>
+    <div class="status-bar" id="status-bar">0 · 1:1 · 16px · 0 file(s)</div>
 
     <script>
         const textarea = document.getElementById('note-textarea');
@@ -81,7 +81,7 @@
             const row = text.split('\n').length;
             const column = text.split('\n').pop().length + 1;
             const fontSize = window.getComputedStyle(textarea).fontSize;
-            statusBar.textContent = `Characters: ${charCount} | Row: ${row}, Column: ${column} | Font size: ${fontSize} | Markdown files: ${markdownFileCount}`;
+            statusBar.textContent = `${charCount} · ${row}:${column} · ${fontSize} · ${markdownFileCount} file(s)`;
         }
 
         document.addEventListener('keydown', (e) => {
