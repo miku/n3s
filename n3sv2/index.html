@@ -48,7 +48,7 @@
             display: none;
             width: 100%;
             height: calc(100% - 30px);
-            background-color: yellow;
+            background-color: white;
             box-sizing: border-box;
             padding: 10px;
             overflow-y: auto;
@@ -114,11 +114,46 @@
             updateStatusBar(); // Update status bar after font size change
         }
 
+        function typeEffect(text, callback) {
+            let index = 0;
+            const interval = setInterval(() => {
+                if (index < text.length) {
+                    textarea.value += text[index];
+                    index++;
+                    updateStatusBar();
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => deleteEffect(text, callback), 2000);
+                }
+            }, 100);
+        }
+
+        function deleteEffect(text, callback) {
+            let index = text.length;
+            const interval = setInterval(() => {
+                if (index > 0) {
+                    textarea.value = textarea.value.slice(0, -1);
+                    index--;
+                    updateStatusBar();
+                } else {
+                    clearInterval(interval);
+                    callback();
+                }
+            }, 100);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            textarea.value = '';
+            const introText = "kami: your markdown note taking app";
+            typeEffect(introText, () => {
+                textarea.focus();
+            });
+        });
+
         // Initialize the status bar
         updateStatusBar();
     </script>
 </body>
 </html>
-
 
 
