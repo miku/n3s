@@ -32,6 +32,20 @@
             background-color: #fff;
         }
 
+        .typing-cursor {
+            animation: rainbow-cursor 1s infinite;
+        }
+
+        @keyframes rainbow-cursor {
+            0% { border-color: red; }
+            16% { border-color: orange; }
+            32% { border-color: yellow; }
+            48% { border-color: green; }
+            64% { border-color: blue; }
+            80% { border-color: indigo; }
+            100% { border-color: violet; }
+        }
+
         .status-bar {
             height: 30px;
             background-color: #ddd;
@@ -59,7 +73,7 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-    <textarea placeholder="Start typing your notes..." id="note-textarea"></textarea>
+    <textarea placeholder="Let's go …" id="note-textarea"></textarea>
     <div class="preview" id="preview"></div>
     <div class="status-bar" id="status-bar">Characters: 0 | Row: 1, Column: 1 | Font size: 16px</div>
 
@@ -116,6 +130,7 @@
 
         function typeEffect(text, callback) {
             let index = 0;
+            textarea.classList.add('typing-cursor');
             const interval = setInterval(() => {
                 if (index < text.length) {
                     textarea.value += text[index];
@@ -137,6 +152,7 @@
                     updateStatusBar();
                 } else {
                     clearInterval(interval);
+                    textarea.classList.remove('typing-cursor');
                     callback();
                 }
             }, 100);
@@ -144,7 +160,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             textarea.value = '';
-            const introText = "kami: your markdown note taking app";
+            const introText = "kami: write together";
             typeEffect(introText, () => {
                 textarea.focus();
             });
@@ -155,5 +171,4 @@
     </script>
 </body>
 </html>
-
 
