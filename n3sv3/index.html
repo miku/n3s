@@ -55,8 +55,6 @@
             font-family: Arial, sans-serif;
             line-height: 1.5;
         }
-
-
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
@@ -71,9 +69,21 @@
         const preview = document.getElementById('preview');
         let isPreviewMode = false;
 
-        textarea.addEventListener('input', updateStatusBar);
-        textarea.addEventListener('keyup', updateStatusBar);
-        textarea.addEventListener('click', updateStatusBar);
+        function abbreviatePath(path, maxLength = 40) {
+            if (path.length <= maxLength) return path;
+
+            const sepChar = path.includes('\\') ? '\\' : '/';
+            const parts = path.split(sepChar);
+
+            if (parts.length <= 2) return path;
+
+            const first = parts[0];
+            const last = parts[parts.length - 1];
+            const secondLast = parts[parts.length - 2];
+
+            const abbreviated = `${first}${sepChar}...${sepChar}${secondLast}${sepChar}${last}`;
+            return abbreviated;
+        }
 
         function updateStatusBar() {
             const charCount = textarea.value.length;
@@ -81,7 +91,8 @@
             const row = text.split('\n').length;
             const column = text.split('\n').pop().length + 1;
             const fontSize = window.getComputedStyle(textarea).fontSize;
-            statusBar.textContent = `${charCount} · ${row}:${column} · ${fontSize} · ${markdownFileCount} file(s)`;
+            const currentPath = window.api?.cwd ? abbreviatePath(window.api.cwd) : '';
+            statusBar.textContent = `${currentPath} · ${charCount} · ${row}:${column} · ${fontSize} · ${markdownFileCount} file(s)`;
         }
 
         document.addEventListener('keydown', (e) => {
@@ -113,7 +124,7 @@
             const currentSize = parseInt(window.getComputedStyle(textarea).fontSize, 10);
             const newSize = Math.max(10, currentSize + delta);
             textarea.style.fontSize = `${newSize}px`;
-            updateStatusBar(); // Update status bar after font size change
+            updateStatusBar();
         }
 
         function typeEffect(text, callback) {
@@ -125,19 +136,17 @@
                     updateStatusBar();
                 } else {
                     clearInterval(interval);
-
-                    // Highlight "together" for 2 seconds
                     const highlightStart = text.indexOf("together");
                     const highlightEnd = highlightStart + "together".length;
                     textarea.setSelectionRange(highlightStart, highlightEnd);
                     textarea.focus();
 
                     setTimeout(() => {
-                        textarea.setSelectionRange(0, 0); // Reset selection
+                        textarea.setSelectionRange(0, 0);
                         deleteEffect(text, callback);
                     }, 2000);
                 }
-            }, 50);
+            }, 100);
         }
 
         function deleteEffect(text, callback) {
@@ -151,17 +160,17 @@
                     clearInterval(interval);
                     callback();
                 }
-            }, 50);
+            }, 100);
         }
 
-        let markdownFileCount = 0; // Initialize markdown file count
+        let markdownFileCount = 0;
 
         async function initializeMarkdownCount() {
             if (window.api && window.api.cwd && window.api.findMarkdownFiles) {
                 try {
                     const files = await window.api.findMarkdownFiles(window.api.cwd);
                     markdownFileCount = files.length;
-                    updateStatusBar(); // Update the status bar with the markdown file count
+                    updateStatusBar();
                 } catch (error) {
                     console.error('Error finding markdown files:', error);
                 }
@@ -174,14 +183,13 @@
             typeEffect(introText, () => {
                 textarea.focus();
             });
-            initializeMarkdownCount(); // Fetch and display markdown file count
+            initializeMarkdownCount();
         });
 
-        // Initialize the status bar
         updateStatusBar();
     </script>
 </body>
 </html>
 
-
 <!-- https://chatgpt.com/c/675cc7f0-0728-8002-9685-3f6f67545454 -->
+<!-- https://claude.ai/chat/d755e977-cecb-4dcc-bf5e-07702bbbcb38 -->
