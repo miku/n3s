@@ -69,6 +69,13 @@
         const preview = document.getElementById('preview');
         let isPreviewMode = false;
 
+        // Add event listeners for real-time updates
+        textarea.addEventListener('input', updateStatusBar);
+        textarea.addEventListener('keyup', updateStatusBar);
+        textarea.addEventListener('click', updateStatusBar);
+        textarea.addEventListener('select', updateStatusBar);
+        textarea.addEventListener('mousemove', updateStatusBar);
+
         function abbreviatePath(path, maxLength = 40) {
             if (path.length <= maxLength) return path;
 
@@ -190,6 +197,5 @@
     </script>
 </body>
 </html>
-
 <!-- https://chatgpt.com/c/675cc7f0-0728-8002-9685-3f6f67545454 -->
 <!-- https://claude.ai/chat/d755e977-cecb-4dcc-bf5e-07702bbbcb38 -->
