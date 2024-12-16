@@ -2,7 +2,6 @@ const {
     app,
     BrowserWindow
 } = require('electron/main');
-// Include the Node.js 'path' module at the top of your file
 const path = require('node:path');
 
 // App, which controls your application's event lifecycle.
