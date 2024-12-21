@@ -100,6 +100,7 @@
             const fontSize = window.getComputedStyle(textarea).fontSize;
             const currentPath = window.api?.cwd ? abbreviatePath(window.api.cwd) : '';
             statusBar.textContent = `${currentPath} · ${charCount} · ${row}:${column} · ${fontSize} · ${markdownFileCount} file(s)`;
+
         }
 
         document.addEventListener('keydown', (e) => {
@@ -114,6 +115,36 @@
                 changeFontSize(-1);
             }
         });
+
+
+		// https://chat-ai.academiccloud.de/chat/7c6d3730-c894-4313-9d06-736b069e4f2b
+        textarea.addEventListener('input', () => {
+              const transformedText = window.api.transformText(textarea.value);
+              textarea.value = transformedText;
+        });
+
+		let buffer = '';
+
+		textarea.addEventListener('input', async () => {
+			const lines = textarea.value.split('\n');
+			for (let i = 0; i < lines.length; i++) {
+				if (lines[i].startsWith('>> ')) {
+					buffer += lines[i].substring(3) + '\n';
+				} else if (buffer !== '') {
+					const prompt = buffer.trim();
+					// buffer = '';
+					// const generatedText = await window.api.generateText(prompt);
+					// lines[i] = '>> ' + prompt + '\n' + generatedText + '\n' + lines[i];
+
+					// Create a typing effect in the browser
+					window.api.generateText(prompt, (token) => {
+						textarea.value = textarea.value + token;
+					});
+				}
+			}
+			// textarea.value = lines.join('\n');
+		});
+
 
         function togglePreviewMode() {
             isPreviewMode = !isPreviewMode;
@@ -151,9 +182,9 @@
                     setTimeout(() => {
                         textarea.setSelectionRange(0, 0);
                         deleteEffect(text, callback);
-                    }, 2000);
+                    }, 800);
                 }
-            }, 100);
+            }, 30);
         }
 
         function deleteEffect(text, callback) {
@@ -167,7 +198,7 @@
                     clearInterval(interval);
                     callback();
                 }
-            }, 100);
+            }, 30);
         }
 
         let markdownFileCount = 0;

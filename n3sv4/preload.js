@@ -9,6 +9,8 @@ const path = require('path');
 contextBridge.exposeInMainWorld('api', {
 	cwd: process.cwd(),
 	findMarkdownFiles: findMarkdownFiles,
+	transformText: transformText,
+	generateText: generateText,
 });
 
 /**
@@ -36,4 +38,105 @@ function findMarkdownFiles(dir) {
 	}
 
 	return markdownFiles;
+}
+
+function transformText(text) {
+	const currentDate = new Date().toISOString().split('T')[0];
+	// run various replacements:
+	let result = text;
+	result = result.replace(/LOREM/g, "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.");
+	result = result.replace(/DATE/g, currentDate);
+	return result
+}
+
+// https://chat-ai.academiccloud.de/chat/7c6d3730-c894-4313-9d06-736b069e4f2b
+// async function generateText(prompt) {
+// 	const response = await fetch('http://k9:11434/api/generate', {
+// 		method: 'POST',
+// 		headers: {
+// 			'Content-Type': 'application/json',
+// 		},
+// 		body: JSON.stringify({
+// 			model: 'gemma',
+// 			prompt: prompt,
+// 		}),
+// 	});
+//
+// 	let generatedText = '';
+//
+// 	return new Promise((resolve, reject) => {
+// 		response.body.on('data', (chunk) => {
+// 			const data = JSON.parse(chunk.toString());
+// 			generatedText += data.response;
+// 			if (data.done) {
+// 				resolve(generatedText);
+// 			}
+// 		});
+// 		response.body.on('error', (err) => {
+// 			reject(err);
+// 		});
+// 	});
+// }
+
+
+async function generateText(prompt, onToken = null) {
+	const response = await fetch('http://k9:11434/api/generate', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			model: 'gemma',
+			prompt: prompt,
+		}),
+	});
+
+	if (!response.ok) {
+		throw new Error(`HTTP error! status: ${response.status}`);
+	}
+
+	const reader = response.body.getReader();
+	let generatedText = '';
+
+	try {
+		while (true) {
+			const {
+				done,
+				value
+			} = await reader.read();
+
+			if (done) {
+				break;
+			}
+
+			// Convert the Uint8Array to a string
+			const chunk = new TextDecoder().decode(value);
+
+			// The response might contain multiple JSON objects
+			const lines = chunk.split('\n').filter(line => line.trim());
+
+			for (const line of lines) {
+				try {
+					const data = JSON.parse(line);
+
+					// Call the callback with the new token if provided
+					if (onToken && data.response) {
+						onToken(data.response);
+					}
+
+					generatedText += data.response;
+
+					if (data.done) {
+						return generatedText;
+					}
+				} catch (e) {
+					console.warn('Failed to parse JSON:', e);
+				}
+			}
+		}
+	} finally {
+		reader.releaseLock();
+	}
+
+	return generatedText;
 }
