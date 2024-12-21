@@ -68,6 +68,7 @@
         const statusBar = document.getElementById('status-bar');
         const preview = document.getElementById('preview');
         let isPreviewMode = false;
+        let currentFile = '';
 
         // Add event listeners for real-time updates
         textarea.addEventListener('input', updateStatusBar);
@@ -98,8 +99,12 @@
             const row = text.split('\n').length;
             const column = text.split('\n').pop().length + 1;
             const fontSize = window.getComputedStyle(textarea).fontSize;
-            const currentPath = window.api?.cwd ? abbreviatePath(window.api.cwd) : '';
-            statusBar.textContent = `${currentPath} · ${charCount} · ${row}:${column} · ${fontSize} · ${markdownFileCount} file(s)`;
+            // const currentPath = window.api?.cwd ? abbreviatePath(window.api.cwd) : '';
+            if (currentFile != "") {
+                statusBar.textContent = `${currentFile} · ${charCount} · ${row}:${column} · ${fontSize} · ${markdownFileCount} file(s)`;
+            } else {
+                statusBar.textContent = `📓 · ${charCount} · ${row}:${column} · ${fontSize} · ${markdownFileCount} file(s)`;
+            }
 
         }
 
@@ -124,7 +129,6 @@
         });
 
 		let buffer = '';
-
 
         textarea.addEventListener('keydown', async (event) => {
             if (event.ctrlKey && event.key === 'g') {
@@ -155,6 +159,13 @@
                     }
                 }
                 textarea.value = lines.join('\n');
+            }
+        });
+
+        textarea.addEventListener('keydown', async (event) => {
+            if (event.ctrlKey && event.key === 's') {
+                event.preventDefault();
+                window.api.saveFile(textarea.value);
             }
         });
 
@@ -232,6 +243,10 @@
             const introText = "kami: write together";
             typeEffect(introText, () => {
                 textarea.focus();
+                const filename = 'scratch.md';
+                textarea.value = window.api.loadFile(filename);
+                currentFile = filename;
+                updateStatusBar();
             });
             initializeMarkdownCount();
         });
