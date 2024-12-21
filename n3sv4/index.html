@@ -125,26 +125,25 @@
 
 		let buffer = '';
 
-		textarea.addEventListener('input', async () => {
-			const lines = textarea.value.split('\n');
-			for (let i = 0; i < lines.length; i++) {
-				if (lines[i].startsWith('>> ')) {
-					buffer += lines[i].substring(3) + '\n';
-				} else if (buffer !== '') {
-					const prompt = buffer.trim();
-					// buffer = '';
-					// const generatedText = await window.api.generateText(prompt);
-					// lines[i] = '>> ' + prompt + '\n' + generatedText + '\n' + lines[i];
-
-					// Create a typing effect in the browser
-					window.api.generateText(prompt, (token) => {
-						textarea.value = textarea.value + token;
-					});
+		textarea.addEventListener('keydown', async (event) => {
+			if (event.ctrlKey && event.key === 'g') {
+				event.preventDefault();
+				const lines = textarea.value.split('\n');
+				for (let i = 0; i < lines.length; i++) {
+					if (lines[i].startsWith('>> ')) {
+						const prompt = lines[i].substring(3);
+						let generatedText = '';
+						await window.api.generateText(prompt, (token) => {
+							generatedText += token;
+							lines[i] = '>> ' + prompt + '\n\n> ' + generatedText;
+							textarea.value = lines.join('\n');
+							textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+						});
+					}
 				}
+				textarea.value = lines.join('\n');
 			}
-			// textarea.value = lines.join('\n');
 		});
-
 
         function togglePreviewMode() {
             isPreviewMode = !isPreviewMode;

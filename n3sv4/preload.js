@@ -49,35 +49,6 @@ function transformText(text) {
 	return result
 }
 
-// https://chat-ai.academiccloud.de/chat/7c6d3730-c894-4313-9d06-736b069e4f2b
-// async function generateText(prompt) {
-// 	const response = await fetch('http://k9:11434/api/generate', {
-// 		method: 'POST',
-// 		headers: {
-// 			'Content-Type': 'application/json',
-// 		},
-// 		body: JSON.stringify({
-// 			model: 'gemma',
-// 			prompt: prompt,
-// 		}),
-// 	});
-//
-// 	let generatedText = '';
-//
-// 	return new Promise((resolve, reject) => {
-// 		response.body.on('data', (chunk) => {
-// 			const data = JSON.parse(chunk.toString());
-// 			generatedText += data.response;
-// 			if (data.done) {
-// 				resolve(generatedText);
-// 			}
-// 		});
-// 		response.body.on('error', (err) => {
-// 			reject(err);
-// 		});
-// 	});
-// }
-
 
 async function generateText(prompt, onToken = null) {
 	const response = await fetch('http://k9:11434/api/generate', {
